@@ -1,23 +1,31 @@
 import React from "react";
 import GenreContainer from "../../Components/GenreContainer";
 import "../../styles.css";
-import puzzle from "./Images/puzzle.png";
-import action from "./Images/action.png";
-import fps from "./Images/fps.svg";
-import racing from "./Images/racing.png";
+import xone from "./Images/xone.png";
+import ps4 from "./Images/ps4.png";
+import nSwitch from "./Images/nSwitch.png";
 
-function Destaque() {
-  return (
-    <div className="main">
-      <span className="destaque-title">Generos em alta</span>
-      <div className="genres-container">
-        <GenreContainer name="Action" image={action} />
-        <GenreContainer name="Puzzle" image={puzzle} />
-        <GenreContainer name="FPS" image={fps} />
-        <GenreContainer name="Racing" image={racing} />
+export default class Destaque extends React.Component {
+  componentDidMount() {
+    fetch(
+      "http://www.gamespot.com/api/articles/?api_key=22a51724c27f8fd4c189c8f6a565eafa0ed7b1a0&format=json",
+      {
+        method: "GET",
+        mode: "no-cors"
+      }
+    ).then(res => console.log(res));
+  }
+
+  render() {
+    return (
+      <div className="main">
+        <span className="destaque-title">Plataformas</span>
+        <div className="genres-container">
+          <GenreContainer name="PS4" image={ps4} />
+          <GenreContainer name="Xbox One" image={xone} />
+          <GenreContainer name="Switch" image={nSwitch} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
-
-export default Destaque;
