@@ -2,12 +2,17 @@ import React, { Component } from "react";
 import GameCard from "../Components/GameCard";
 import d_arrow from "./Images/d_arrow.png";
 import PopUp from "../Components/popUp";
+import arrow from "./Images/arrow.png";
 const firebase = require("firebase/app");
 
 require("firebase/firestore");
 let nOfResults = 0;
 let popUp;
-let gameFilter = "";
+let gameFilter =
+  localStorage.getItem("searchParam") != null
+    ? localStorage.getItem("searchParam")
+    : "";
+localStorage.removeItem("searchParam");
 let gameCards = [];
 var firebaseConfig = {
   apiKey: "AIzaSyAWdWj7-1qR5jnzXFBobV1Af4jvFwaEOBE",
@@ -16,7 +21,9 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 let games = [];
-
+let gamesPaginated = [];
+let size = 10;
+let currentPage = 0;
 export default class Catalogo extends Component {
   constructor(props) {
     super(props);
@@ -32,18 +39,17 @@ export default class Catalogo extends Component {
         query.forEach(game => {
           games.push({
             image: game.data().url,
-            title: game.data().Title,
-            platform: game.data().Platform,
+            title: game.data().title,
+            platform: game.data().platform,
             release: game.data().release,
-            price: game.data().Price,
+            price: game.data().price,
             genre: game.data().genre
           });
         });
         this.sort(games, true);
-        console.log(games);
-        gameCards = [];
         if (gameFilter === "") {
-          games.forEach(game => {
+          gameCards = [];
+          gamesPaginated[0].forEach(game => {
             gameCards.push(
               <GameCard
                 key={Math.min(Math.random() * 999999)}
@@ -56,6 +62,11 @@ export default class Catalogo extends Component {
             );
           });
           nOfResults = games.length;
+        } else {
+          console.log(
+            `doing Search through Pages with this keyword: ${gameFilter}`
+          );
+          this.doSearch(gameFilter);
         }
         this.setState({ loaded: true });
       });
@@ -91,9 +102,11 @@ export default class Catalogo extends Component {
       });
     });
     document.querySelector(".search-button").addEventListener("click", () => {
-      gameFilter = document.querySelector(".search-bar").value;
-      document.querySelector(".search-bar").value = "";
-      this.doSearch(gameFilter);
+      if (window.location.href.includes("catalogo")) {
+        gameFilter = document.querySelector(".search-bar").value;
+        document.querySelector(".search-bar").value = "";
+        this.doSearch(gameFilter);
+      }
     });
     document.querySelector(".clear-button").addEventListener("click", () => {
       this.clearFilters();
@@ -102,6 +115,53 @@ export default class Catalogo extends Component {
     //   this.setState({ openPopUP: true });
     //   popUp = "";
     // });
+    document.querySelector("#up").addEventListener("click", () => {
+      this.sort(true);
+      this.forceUpdate();
+    });
+    document.querySelector("#down").addEventListener("click", () => {
+      this.sort(false);
+      this.forceUpdate();
+    });
+    document.querySelector("#next").addEventListener("click", () => {
+      if (currentPage < gamesPaginated.length) {
+        currentPage++;
+        gameCards = [];
+        gamesPaginated[currentPage].forEach(game => {
+          gameCards.push(
+            <GameCard
+              key={Math.min(Math.random() * 999999)}
+              image={game.image}
+              price={game.price}
+              title={game.title}
+              release={game.release}
+              platform={game.platform}
+            />
+          );
+        });
+      }
+      this.forceUpdate();
+    });
+
+    document.querySelector("#previous").addEventListener("click", () => {
+      if (currentPage > 0) {
+        currentPage--;
+        gameCards = [];
+        gamesPaginated[currentPage].forEach(game => {
+          gameCards.push(
+            <GameCard
+              key={Math.min(Math.random() * 999999)}
+              image={game.image}
+              price={game.price}
+              title={game.title}
+              release={game.release}
+              platform={game.platform}
+            />
+          );
+        });
+      }
+      this.forceUpdate();
+    });
     document.querySelectorAll(".game-image").forEach(image => {
       image.addEventListener("click", () => {
         let siblings = image.parentElement.childNodes;
@@ -111,7 +171,7 @@ export default class Catalogo extends Component {
       });
     });
   }
-  sort(games, crescente) {
+  sort(crescente) {
     if (!crescente) {
       for (let i = 0; i < games.length; i++) {
         for (let j = i + 1; j < games.length; j++) {
@@ -134,7 +194,26 @@ export default class Catalogo extends Component {
         }
       }
     }
+    gameCards = [];
+    gamesPaginated = [];
+    for (let i = 0; i < games.length; i += size) {
+      gamesPaginated.push(games.slice(i, i + size));
+    }
+    gamesPaginated[0].forEach(game => {
+      gameCards.push(
+        <GameCard
+          key={Math.min(Math.random() * 999999)}
+          image={game.image}
+          price={game.price}
+          title={game.title}
+          release={game.release}
+          platform={game.platform}
+        />
+      );
+    });
+    this.forceUpdate();
   }
+
   Filter(searchParam) {
     nOfResults = 0;
     gameCards = [];
@@ -148,8 +227,7 @@ export default class Catalogo extends Component {
       games.forEach(game => {
         let values = Object.values(game);
         values.forEach(value => {
-          if (value > range[0] && value < range[1]) {
-            console.log("Works");
+          if (value >= range[0] && value <= range[1]) {
             gameCards.push(
               <GameCard
                 key={Math.min(Math.random() * 999999)}
@@ -167,7 +245,6 @@ export default class Catalogo extends Component {
       this.forceUpdate();
     }
     if (range.length <= 1) {
-      console.log("Doesn't");
       nOfResults = 0;
       gameCards = [];
       games.forEach(game => {
@@ -191,56 +268,29 @@ export default class Catalogo extends Component {
       this.forceUpdate();
     }
   }
-  doSearch(searchParam) {
-    if (!window.location.href.includes("catalogo")) {
-      window.location.href += "catalogo";
-      setTimeout(() => {
-        if (searchParam !== "") {
-          games.forEach(game => {
-            let values = Object.values(game);
-            values.forEach(value => {
-              if (value.toLowerCase().includes(searchParam.toLowerCase())) {
-                gameCards.push(
-                  <GameCard
-                    key={Math.min(Math.random() * 999999)}
-                    image={game.image}
-                    price={game.price}
-                    title={game.title}
-                    release={game.release}
-                    platform={game.platform}
-                  />
-                );
-                nOfResults++;
-              }
-            });
-          });
-        }
-      }, 1000);
-    } else {
-      if (searchParam !== "") {
-        nOfResults = 0;
-        gameCards = [];
-        games.forEach(game => {
-          let values = Object.values(game);
-          values.forEach(value => {
-            if (typeof value == "string") {
-              if (value.toLowerCase().includes(searchParam.toLowerCase())) {
-                gameCards.push(
-                  <GameCard
-                    key={Math.min(Math.random() * 999999)}
-                    image={game.image}
-                    price={game.price}
-                    title={game.title}
-                    release={game.release}
-                    platform={game.platform}
-                  />
-                );
-                nOfResults++;
-              }
+  doSearch() {
+    if (gameFilter !== "") {
+      gameCards = [];
+      games.forEach(game => {
+        let values = Object.values(game);
+        values.forEach(value => {
+          if (typeof value == "string") {
+            if (value.toLowerCase().includes(gameFilter.toLowerCase())) {
+              gameCards.push(
+                <GameCard
+                  key={Math.min(Math.random() * 999999)}
+                  image={game.image}
+                  price={game.price}
+                  title={game.title}
+                  release={game.release}
+                  platform={game.platform}
+                />
+              );
+              nOfResults++;
             }
-          });
+          }
         });
-      }
+      });
     }
 
     this.forceUpdate();
@@ -248,7 +298,7 @@ export default class Catalogo extends Component {
   clearFilters() {
     gameFilter = "";
     gameCards = [];
-    games.forEach(game => {
+    gamesPaginated[0].forEach(game => {
       gameCards.push(
         <GameCard
           key={Math.min(Math.random() * 999999)}
@@ -260,7 +310,7 @@ export default class Catalogo extends Component {
         />
       );
     });
-    nOfResults = games.length;
+    nOfResults = gamesPaginated[0].length;
     this.forceUpdate();
   }
 
@@ -276,10 +326,14 @@ export default class Catalogo extends Component {
         <div className="catalogo-bg">
           <div className="filter-column">
             <div className="filter-line">
+              <img className="arrow" id="up" src={arrow} />
+              <img className="arrow" id="down" src={arrow} />
+            </div>
+            <br />
+            <div className="filter-line">
               <span className="filter-category">Plataforma</span>
               <img className="filter-arrow" src={d_arrow} />
               <div className="filters-dropdown">
-                <span className="filter-name">PC</span>
                 <span className="filter-name">Playstation 4</span>
                 <span className="filter-name">Xbox One</span>
                 <span className="filter-name">Nintendo Switch</span>
@@ -293,17 +347,18 @@ export default class Catalogo extends Component {
                 <span className="filter-name">R$50 - R$100</span>
                 <span className="filter-name">R$100 - R$150</span>
                 <span className="filter-name">R$150 - R$200</span>
-                <span className="filter-name">R$200 - R$250</span>
-                <span className="filter-name">R$250 ou + </span>
+                <span className="filter-name">R$200 - R$300</span>
               </div>
             </div>
             <div className="filter-line">
               <span className="filter-category">Genero</span>
               <img className="filter-arrow" src={d_arrow} />
               <div className="filters-dropdown">
-                <span className="filter-name">Acao</span>
+                <span className="filter-name">Ação</span>
+                <span className="filter-name">Terror</span>
                 <span className="filter-name">Puzzle</span>
                 <span className="filter-name">Corrida</span>
+                <span className="filter-name">Esporte</span>
                 <span className="filter-name">Aventura</span>
                 <span className="filter-name">FPS</span>
                 <span className="filter-name">RPG</span>
@@ -313,6 +368,14 @@ export default class Catalogo extends Component {
             <button className="clear-button">Limpar</button>
           </div>
           <div className="card-container">{gameCards}</div>
+          <div className="page-navigation">
+            <span className="indexes" id="previous">
+              Anterior
+            </span>
+            <span className="indexes" id="next">
+              Próxima
+            </span>
+          </div>
         </div>
       </div>
     );

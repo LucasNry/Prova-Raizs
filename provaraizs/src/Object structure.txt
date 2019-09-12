@@ -1,0 +1,7 @@
+description
+title
+price
+platform
+release
+genre
+url
