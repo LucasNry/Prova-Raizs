@@ -4,8 +4,13 @@ import "../styles.css";
 import Destaque from "./Sections/destaque";
 import About from "./Sections/about";
 import Contato from "./Sections/Contato";
+import Quarta from "./Sections/quarta";
 
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { loaded: false };
+  }
   componentDidMount() {
     document.querySelector(".search-button").addEventListener("click", () => {
       if (window.location.href[20] == "0") {
@@ -27,8 +32,9 @@ export default class Home extends React.Component {
     return (
       <div>
         <Destaque />
-        <Contato />
         <About />
+        <Contato />
+        <Quarta />
       </div>
     );
   }

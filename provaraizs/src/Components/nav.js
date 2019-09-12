@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles.css";
 import gamepad from "./Images/gamepad.png";
-import search from "./Images/search.png";
 const Nav = () => {
   return (
     <nav>
@@ -18,7 +17,7 @@ const Nav = () => {
           placeholder="Busque o seu jogo favorito"
         />
         <div className="search-button">
-          <img className="search" src={search} />
+          <img className="search" />
           <span className="search-button-text">Search</span>
         </div>
       </div>

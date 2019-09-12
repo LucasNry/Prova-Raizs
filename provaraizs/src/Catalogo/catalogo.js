@@ -58,7 +58,6 @@ export default class Catalogo extends Component {
             genre: game.data().genre
           });
         });
-
         //Sorts the data in ascending order by default and paginates the Games based on the established size
         this.Sort(games, true);
         //Renders all games(with the page limit) if the filter is empty, if it's not it shows the search results
@@ -141,12 +140,6 @@ export default class Catalogo extends Component {
       this.clearFilters();
     });
 
-    //TODO: close Pop Up functionality
-    // document.querySelector(".close-popup").addEventListener("click", () => {
-    //   this.setState({ openPopUP: true });
-    //   popUp = "";
-    // });
-
     //Display games in ascending order
     document.querySelector("#up").addEventListener("click", () => {
       this.Sort(true);
@@ -217,7 +210,7 @@ export default class Catalogo extends Component {
   }
 
   //Sorting function, works for both ascending and descending order
-  Sort(crescente) {
+  Sort = crescente => {
     currentPage = 0;
     if (!crescente) {
       for (let i = 0; i < games.length; i++) {
@@ -259,10 +252,10 @@ export default class Catalogo extends Component {
       );
     });
     this.forceUpdate();
-  }
+  };
 
   //Filtering function
-  Filter() {
+  Filter = () => {
     nOfResults = 0;
     gameCards = [];
     let range = [];
@@ -315,10 +308,10 @@ export default class Catalogo extends Component {
       });
       this.forceUpdate();
     }
-  }
+  };
 
   //Search Function
-  doSearch() {
+  doSearch = () => {
     if (gameFilter !== "") {
       gameCards = [];
       nOfResults = 0;
@@ -340,17 +333,17 @@ export default class Catalogo extends Component {
     }
 
     this.forceUpdate();
-  }
+  };
 
   //Clear Filters function, resets the filters
-  clearFilters() {
+  clearFilters = () => {
     gameFilter = "";
     gameCards = [];
     currentPage = 0;
     this.Sort(true);
     nOfResults = games.length;
     this.forceUpdate();
-  }
+  };
 
   render() {
     return (
