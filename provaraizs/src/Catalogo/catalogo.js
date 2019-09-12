@@ -24,10 +24,11 @@ let games = [];
 let gamesPaginated = [];
 let size = 10;
 let currentPage = 0;
+let searchType = localStorage.getItem("searchType");
 export default class Catalogo extends Component {
   constructor(props) {
     super(props);
-    this.state = { openPopUp: false, loaded: false };
+    this.state = { loaded: false };
   }
 
   componentDidMount() {
@@ -48,8 +49,9 @@ export default class Catalogo extends Component {
         });
         this.sort(games, true);
         if (gameFilter === "") {
+          currentPage = 0;
           gameCards = [];
-          gamesPaginated[0].forEach(game => {
+          gamesPaginated[currentPage].forEach(game => {
             gameCards.push(
               <GameCard
                 key={Math.min(Math.random() * 999999)}
@@ -63,10 +65,16 @@ export default class Catalogo extends Component {
           });
           nOfResults = games.length;
         } else {
-          console.log(
-            `doing Search through Pages with this keyword: ${gameFilter}`
-          );
-          this.doSearch(gameFilter);
+          console.log(searchType);
+          console.log(gameFilter);
+          if (searchType != null && searchType == "search") {
+            this.doSearch(gameFilter);
+            console.log("Searched");
+          }
+          if (searchType != null && searchType == "filter") {
+            this.Filter();
+            console.log("Filtered");
+          }
         }
         this.setState({ loaded: true });
       });
@@ -98,7 +106,7 @@ export default class Catalogo extends Component {
     document.querySelectorAll(".filter-name").forEach(filter => {
       filter.addEventListener("click", () => {
         gameFilter = filter.innerHTML;
-        this.Filter(gameFilter);
+        this.Filter();
       });
     });
     document.querySelector(".search-button").addEventListener("click", () => {
@@ -162,16 +170,21 @@ export default class Catalogo extends Component {
       }
       this.forceUpdate();
     });
-    document.querySelectorAll(".game-image").forEach(image => {
-      image.addEventListener("click", () => {
-        let siblings = image.parentElement.childNodes;
-        popUp = <PopUp title={siblings[1].innerHTML} src="" description="a" />;
-        console.log(popUp);
-        this.forceUpdate();
-      });
-    });
+    // this.refs.image.addEventListener("click", () => {
+    //   let siblings = this.refs.image.parentElement.childNodes;
+    //   popUp = (
+    //     <PopUp
+    //       title={siblings[1].innerHTML}
+    //       src={this.refs.image.src}
+    //       description="a"
+    //     />
+    //   );
+    //   console.log(popUp);
+    //   this.forceUpdate();
+    // });
   }
   sort(crescente) {
+    currentPage = 0;
     if (!crescente) {
       for (let i = 0; i < games.length; i++) {
         for (let j = i + 1; j < games.length; j++) {
@@ -199,7 +212,7 @@ export default class Catalogo extends Component {
     for (let i = 0; i < games.length; i += size) {
       gamesPaginated.push(games.slice(i, i + size));
     }
-    gamesPaginated[0].forEach(game => {
+    gamesPaginated[currentPage].forEach(game => {
       gameCards.push(
         <GameCard
           key={Math.min(Math.random() * 999999)}
@@ -214,12 +227,12 @@ export default class Catalogo extends Component {
     this.forceUpdate();
   }
 
-  Filter(searchParam) {
+  Filter() {
     nOfResults = 0;
     gameCards = [];
     let range = [];
     try {
-      range = searchParam.match(/\d+/g).map(Number);
+      range = gameFilter.match(/\d+/g).map(Number);
     } catch (error) {
       range = [];
     }
@@ -250,7 +263,7 @@ export default class Catalogo extends Component {
       games.forEach(game => {
         let values = Object.values(game);
         values.forEach(value => {
-          if (value == searchParam) {
+          if (value == gameFilter) {
             gameCards.push(
               <GameCard
                 key={Math.min(Math.random() * 999999)}
@@ -271,25 +284,21 @@ export default class Catalogo extends Component {
   doSearch() {
     if (gameFilter !== "") {
       gameCards = [];
+      nOfResults = 0;
       games.forEach(game => {
-        let values = Object.values(game);
-        values.forEach(value => {
-          if (typeof value == "string") {
-            if (value.toLowerCase().includes(gameFilter.toLowerCase())) {
-              gameCards.push(
-                <GameCard
-                  key={Math.min(Math.random() * 999999)}
-                  image={game.image}
-                  price={game.price}
-                  title={game.title}
-                  release={game.release}
-                  platform={game.platform}
-                />
-              );
-              nOfResults++;
-            }
-          }
-        });
+        if (game.title.toLowerCase().includes(gameFilter.toLowerCase())) {
+          gameCards.push(
+            <GameCard
+              key={Math.min(Math.random() * 999999)}
+              image={game.image}
+              price={game.price}
+              title={game.title}
+              release={game.release}
+              platform={game.platform}
+            />
+          );
+          nOfResults++;
+        }
       });
     }
 
@@ -298,19 +307,21 @@ export default class Catalogo extends Component {
   clearFilters() {
     gameFilter = "";
     gameCards = [];
-    gamesPaginated[0].forEach(game => {
-      gameCards.push(
-        <GameCard
-          key={Math.min(Math.random() * 999999)}
-          image={game.image}
-          price={game.price}
-          title={game.title}
-          release={game.release}
-          platform={game.platform}
-        />
-      );
-    });
-    nOfResults = gamesPaginated[0].length;
+    currentPage = 0;
+    this.sort(true);
+    // gamesPaginated[currentPage].forEach(game => {
+    //   gameCards.push(
+    //     <GameCard
+    //       key={Math.min(Math.random() * 999999)}
+    //       image={game.image}
+    //       price={game.price}
+    //       title={game.title}
+    //       release={game.release}
+    //       platform={game.platform}
+    //     />
+    //   );
+    // });
+    nOfResults = games.length;
     this.forceUpdate();
   }
 

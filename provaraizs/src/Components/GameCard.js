@@ -2,10 +2,10 @@ import React from "react";
 
 // import { Container } from './styles';
 
-const GameCard = props => {
+const GameCard = React.forwardRef((props, ref) => {
   return (
     <div className="game-card">
-      <img className="game-image" src={props.image} alt="" />
+      <img ref={ref} className="game-image" src={props.image} alt="" />
       <br />
       <br />
       <h1 className="game-title">{props.title}</h1>
@@ -21,6 +21,6 @@ const GameCard = props => {
       <span className="game-price">Preco: R${props.price}</span>
     </div>
   );
-};
+});
 
 export default GameCard;

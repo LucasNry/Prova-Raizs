@@ -14,6 +14,7 @@ export default class Home extends React.Component {
             "searchParam",
             document.querySelector(".search-bar").value
           );
+          localStorage.setItem("searchType", "search");
         } else {
           localStorage.setItem("searchParam", "");
         }

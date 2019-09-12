@@ -19,8 +19,9 @@ export default class Destaque extends React.Component {
       if (window.location.href[20] == "0") {
         localStorage.setItem(
           "searchParam",
-          this.refs.platforms.childNodes[1].innerHTML
+          "Nintendo " + this.refs.platforms.childNodes[1].innerHTML
         );
+        localStorage.setItem("searchType", "filter");
         window.location.href += "catalogo";
       }
     });
