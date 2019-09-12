@@ -7,24 +7,17 @@ import nSwitch from "./Images/nSwitch.png";
 
 export default class Destaque extends React.Component {
   componentDidMount() {
-    // fetch(
-    //   "http://www.gamespot.com/api/articles/?api_key=22a51724c27f8fd4c189c8f6a565eafa0ed7b1a0&format=json",
-    //   {
-    //     method: "GET",
-    //     mode: "no-cors"
+    //TODO: Only uncomment this if the pop-up is working, cause then this will be as well
+    // this.refs.platforms.addEventListener("click", () => {
+    //   if (window.location.href[20] == "0") {
+    //     localStorage.setItem(
+    //       "searchParam",
+    //       "Nintendo " + this.refs.platforms.childNodes[1].innerHTML
+    //     );
+    //     localStorage.setItem("searchType", "filter");
+    //     window.location.href += "catalogo";
     //   }
-    // ).then(res => );
-    console.log(this.refs.platforms);
-    this.refs.platforms.addEventListener("click", () => {
-      if (window.location.href[20] == "0") {
-        localStorage.setItem(
-          "searchParam",
-          "Nintendo " + this.refs.platforms.childNodes[1].innerHTML
-        );
-        localStorage.setItem("searchType", "filter");
-        window.location.href += "catalogo";
-      }
-    });
+    // });
   }
 
   render() {

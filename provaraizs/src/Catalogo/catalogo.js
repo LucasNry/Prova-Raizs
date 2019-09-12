@@ -1,11 +1,16 @@
+//    PROVA PRATICA DE LUCAS DOMINGUES ASSUMPCAO NERY PARA A Raizs
+
+// Imports
 import React, { Component } from "react";
 import GameCard from "../Components/GameCard";
 import d_arrow from "./Images/d_arrow.png";
 import PopUp from "../Components/popUp";
 import arrow from "./Images/arrow.png";
 const firebase = require("firebase/app");
-
 require("firebase/firestore");
+
+// Variable Declaration
+
 let nOfResults = 0;
 let popUp;
 let gameFilter =
@@ -19,12 +24,15 @@ var firebaseConfig = {
   projectId: "raizs-9225d",
   appID: "1:287525215273:web:cdabcb0b7000ee7a609038"
 };
-firebase.initializeApp(firebaseConfig);
 let games = [];
 let gamesPaginated = [];
 let size = 10;
 let currentPage = 0;
 let searchType = localStorage.getItem("searchType");
+
+//Initialize Firebase App
+firebase.initializeApp(firebaseConfig);
+
 export default class Catalogo extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +40,10 @@ export default class Catalogo extends Component {
   }
 
   componentDidMount() {
+    //Clear games variable to receive data from DB
     games = [];
+
+    //Send request to Firebase and store the results
     const DB = firebase.firestore();
     DB.collection("Games")
       .get()
@@ -47,10 +58,15 @@ export default class Catalogo extends Component {
             genre: game.data().genre
           });
         });
-        this.sort(games, true);
+
+        //Sorts the data in ascending order by default and paginates the Games based on the established size
+        this.Sort(games, true);
+        //Renders all games(with the page limit) if the filter is empty, if it's not it shows the search results
         if (gameFilter === "") {
           currentPage = 0;
           gameCards = [];
+
+          //Renders the first 10 games
           gamesPaginated[currentPage].forEach(game => {
             gameCards.push(
               <GameCard
@@ -65,19 +81,19 @@ export default class Catalogo extends Component {
           });
           nOfResults = games.length;
         } else {
-          console.log(searchType);
-          console.log(gameFilter);
           if (searchType != null && searchType == "search") {
             this.doSearch(gameFilter);
-            console.log("Searched");
           }
           if (searchType != null && searchType == "filter") {
             this.Filter();
-            console.log("Filtered");
           }
         }
+
+        //Re-render the page with the content gathered
         this.setState({ loaded: true });
       });
+
+    //Dropdown menus functionality
     document.querySelectorAll(".filter-arrow").forEach(arrow => {
       let openDropdown = false;
       arrow.addEventListener("click", event => {
@@ -103,12 +119,15 @@ export default class Catalogo extends Component {
       });
     });
 
+    //Filters bar functionality
     document.querySelectorAll(".filter-name").forEach(filter => {
       filter.addEventListener("click", () => {
         gameFilter = filter.innerHTML;
         this.Filter();
       });
     });
+
+    //Search functionality within the catalog page
     document.querySelector(".search-button").addEventListener("click", () => {
       if (window.location.href.includes("catalogo")) {
         gameFilter = document.querySelector(".search-bar").value;
@@ -116,21 +135,31 @@ export default class Catalogo extends Component {
         this.doSearch(gameFilter);
       }
     });
+
+    //Clear Filters functionality
     document.querySelector(".clear-button").addEventListener("click", () => {
       this.clearFilters();
     });
+
+    //TODO: close Pop Up functionality
     // document.querySelector(".close-popup").addEventListener("click", () => {
     //   this.setState({ openPopUP: true });
     //   popUp = "";
     // });
+
+    //Display games in ascending order
     document.querySelector("#up").addEventListener("click", () => {
-      this.sort(true);
+      this.Sort(true);
       this.forceUpdate();
     });
+
+    //Display games in descending order
     document.querySelector("#down").addEventListener("click", () => {
-      this.sort(false);
+      this.Sort(false);
       this.forceUpdate();
     });
+
+    //Loads the next card page
     document.querySelector("#next").addEventListener("click", () => {
       if (currentPage < gamesPaginated.length) {
         currentPage++;
@@ -151,6 +180,7 @@ export default class Catalogo extends Component {
       this.forceUpdate();
     });
 
+    //Loads the previous card page
     document.querySelector("#previous").addEventListener("click", () => {
       if (currentPage > 0) {
         currentPage--;
@@ -170,6 +200,8 @@ export default class Catalogo extends Component {
       }
       this.forceUpdate();
     });
+
+    //TODO: Open pop-up functionality
     // this.refs.image.addEventListener("click", () => {
     //   let siblings = this.refs.image.parentElement.childNodes;
     //   popUp = (
@@ -183,7 +215,9 @@ export default class Catalogo extends Component {
     //   this.forceUpdate();
     // });
   }
-  sort(crescente) {
+
+  //Sorting function, works for both ascending and descending order
+  Sort(crescente) {
     currentPage = 0;
     if (!crescente) {
       for (let i = 0; i < games.length; i++) {
@@ -227,6 +261,7 @@ export default class Catalogo extends Component {
     this.forceUpdate();
   }
 
+  //Filtering function
   Filter() {
     nOfResults = 0;
     gameCards = [];
@@ -281,6 +316,8 @@ export default class Catalogo extends Component {
       this.forceUpdate();
     }
   }
+
+  //Search Function
   doSearch() {
     if (gameFilter !== "") {
       gameCards = [];
@@ -304,23 +341,13 @@ export default class Catalogo extends Component {
 
     this.forceUpdate();
   }
+
+  //Clear Filters function, resets the filters
   clearFilters() {
     gameFilter = "";
     gameCards = [];
     currentPage = 0;
-    this.sort(true);
-    // gamesPaginated[currentPage].forEach(game => {
-    //   gameCards.push(
-    //     <GameCard
-    //       key={Math.min(Math.random() * 999999)}
-    //       image={game.image}
-    //       price={game.price}
-    //       title={game.title}
-    //       release={game.release}
-    //       platform={game.platform}
-    //     />
-    //   );
-    // });
+    this.Sort(true);
     nOfResults = games.length;
     this.forceUpdate();
   }
