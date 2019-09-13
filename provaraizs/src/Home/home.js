@@ -32,9 +32,9 @@ export default class Home extends React.Component {
     return (
       <div>
         <Destaque />
+        <Quarta />
         <About />
         <Contato />
-        <Quarta />
       </div>
     );
   }

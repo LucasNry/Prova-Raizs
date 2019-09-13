@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../../styles.css";
-import friends from "./Images/friends.jpg";
+import lamp from "./Images/lamp.png";
 
 export default class About extends Component {
   render() {
@@ -8,12 +8,13 @@ export default class About extends Component {
       <div className="about">
         <div className="about-container">
           <h1>Sobre a Iniciativa</h1>
+          <img className="lamp" src={lamp} />
           <p>
-            Todos nos temos aquele jogo velho pegando poeira na prateleira.Porem
-            o que nao percebemos e que esses mesmos jogos podem fazer outra
-            pessoa feliz e ainda nos ajudar a comprar o jogo do momento.E e isso
-            que fazemos, nos ajudamos voce a desapegar do seu velho e levar a
-            alguem que va fazer dele o seu jogo novo
+            Todos nós temos aquele jogo velho pegando poeira na prateleira.Porém
+            o que não percebemos é que esses mesmos jogos podem fazer outra
+            pessoa feliz e ainda nos ajudar a comprar o jogo do momento.E é isso
+            que fazemos, nós ajudamos você a desapegar do seu velho e levar a
+            alguém que vá fazer dele o seu jogo novo
           </p>
         </div>
       </div>

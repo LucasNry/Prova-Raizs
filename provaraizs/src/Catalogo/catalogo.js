@@ -3,8 +3,7 @@
 // Imports
 import React, { Component } from "react";
 import GameCard from "../Components/GameCard";
-import d_arrow from "./Images/d_arrow.png";
-import PopUp from "../Components/popUp";
+import d_arrow from "./Images/baseline_arrow_drop_down_black_18dp.png";
 import arrow from "./Images/arrow.png";
 const firebase = require("firebase/app");
 require("firebase/firestore");
@@ -13,6 +12,7 @@ require("firebase/firestore");
 
 let nOfResults = 0;
 let popUp;
+console.log(localStorage.getItem("searchParam"));
 let gameFilter =
   localStorage.getItem("searchParam") != null
     ? localStorage.getItem("searchParam")
@@ -36,7 +36,7 @@ firebase.initializeApp(firebaseConfig);
 export default class Catalogo extends Component {
   constructor(props) {
     super(props);
-    this.state = { loaded: false };
+    this.state = { loaded: false, Cards: [] };
   }
 
   componentDidMount() {
@@ -154,7 +154,7 @@ export default class Catalogo extends Component {
 
     //Loads the next card page
     document.querySelector("#next").addEventListener("click", () => {
-      if (currentPage < gamesPaginated.length) {
+      if (currentPage < gamesPaginated.length - 1) {
         currentPage++;
         gameCards = [];
         gamesPaginated[currentPage].forEach(game => {
@@ -170,7 +170,7 @@ export default class Catalogo extends Component {
           );
         });
       }
-      this.forceUpdate();
+      this.setState({ Cards: gameCards });
     });
 
     //Loads the previous card page
@@ -191,22 +191,8 @@ export default class Catalogo extends Component {
           );
         });
       }
-      this.forceUpdate();
+      this.setState({ Cards: gameCards });
     });
-
-    //TODO: Open pop-up functionality
-    // this.refs.image.addEventListener("click", () => {
-    //   let siblings = this.refs.image.parentElement.childNodes;
-    //   popUp = (
-    //     <PopUp
-    //       title={siblings[1].innerHTML}
-    //       src={this.refs.image.src}
-    //       description="a"
-    //     />
-    //   );
-    //   console.log(popUp);
-    //   this.forceUpdate();
-    // });
   }
 
   //Sorting function, works for both ascending and descending order
@@ -251,7 +237,7 @@ export default class Catalogo extends Component {
         />
       );
     });
-    this.forceUpdate();
+    this.setState({ Cards: gameCards });
   };
 
   //Filtering function
@@ -283,7 +269,7 @@ export default class Catalogo extends Component {
           }
         });
       });
-      this.forceUpdate();
+      this.setState({ Cards: gameCards });
     }
     if (range.length <= 1) {
       nOfResults = 0;
@@ -306,7 +292,7 @@ export default class Catalogo extends Component {
           }
         });
       });
-      this.forceUpdate();
+      this.setState({ Cards: gameCards });
     }
   };
 
@@ -332,7 +318,7 @@ export default class Catalogo extends Component {
       });
     }
 
-    this.forceUpdate();
+    this.setState({ Cards: gameCards });
   };
 
   //Clear Filters function, resets the filters
@@ -342,13 +328,11 @@ export default class Catalogo extends Component {
     currentPage = 0;
     this.Sort(true);
     nOfResults = games.length;
-    this.forceUpdate();
   };
 
   render() {
     return (
       <div>
-        {popUp}
         <div className="results-number">
           <span className="results">
             <span className="highlight">{nOfResults}</span> JOGOS ENCONTRADOS
@@ -371,7 +355,7 @@ export default class Catalogo extends Component {
               </div>
             </div>
             <div className="filter-line">
-              <span className="filter-category">Preco</span>
+              <span className="filter-category">Preço</span>
               <img className="filter-arrow" src={d_arrow} />
               <div className="filters-dropdown">
                 <span className="filter-name">R$0 - R$50</span>
@@ -382,7 +366,7 @@ export default class Catalogo extends Component {
               </div>
             </div>
             <div className="filter-line">
-              <span className="filter-category">Genero</span>
+              <span className="filter-category">Gênero</span>
               <img className="filter-arrow" src={d_arrow} />
               <div className="filters-dropdown">
                 <span className="filter-name">Ação</span>

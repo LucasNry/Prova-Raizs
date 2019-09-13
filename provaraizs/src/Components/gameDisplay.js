@@ -1,12 +1,6 @@
 import React from "react";
 
-// import { Container } from './styles';
-
 export default class GameDisplay extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.myDiv.addEventListener("click", () => {
       if (!window.location.href.includes("catalogo")) {
@@ -21,7 +15,7 @@ export default class GameDisplay extends React.Component {
     return (
       <div className="game-display" ref={c => (this.myDiv = c)}>
         <img src={this.props.image} className="game-preview-image" />
-        <span>{this.props.title}</span>
+        <span className="display-title">{this.props.title}</span>
       </div>
     );
   }

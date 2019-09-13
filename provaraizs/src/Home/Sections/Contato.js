@@ -7,13 +7,11 @@ let queryString =
 function Contato() {
   return (
     <div className="contato">
-      <h1>Sem taxas!</h1>
+      <h1>Filosofia da Empresa</h1>
       <p>
-        Todos nos temos aquele jogo velho pegando poeira na prateleira.Porem o
-        que nao percebemos e que esses mesmos jogos podem fazer outra pessoa
-        feliz e ainda nos ajudar a comprar o jogo do momento.E e isso que
-        fazemos, nos ajudamos voce a desapegar do seu velho e levar a alguem que
-        va fazer dele o seu jogo novo
+        Acreditamos que todo jogo usado está a um passo de se tornar o jogo novo
+        de alguém, por isso nos esforçamos diariamente pra trazer o melhor
+        serviço possível
       </p>
     </div>
   );

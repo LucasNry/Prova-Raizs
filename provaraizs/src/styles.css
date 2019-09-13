@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #525252;
+  background-color: #313131;
 }
 .about {
   position: relative;
@@ -50,7 +50,11 @@ h1 {
   position: relative;
   flex-direction: column;
   height: 100vh;
-  background-color: #313131;
+  background-color: #4b4b4b;
+}
+.lamp {
+  width: 5em;
+  padding: 20px 0px 0px 0px;
 }
 .quarta {
   display: flex;
@@ -98,12 +102,23 @@ h1 {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border: 1px solid black;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 0px;
   width: 12em;
   height: 17em;
 }
 .game-display:hover {
   cursor: pointer;
+}
+.display-title {
+  color: rgb(245, 245, 245);
+  width: 100%;
+  height: 2.5em;
+  font-weight: 550;
+  text-align: center;
+  background-color: #d41623;
+  padding: 10px 0px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 15px;
 }
 nav {
   display: flex;
@@ -119,15 +134,16 @@ nav {
   text-decoration: none;
   outline: none;
   color: black;
-  /* border-left: 1px solid black; */
-  border-right: 1px solid black;
+  font-family: "Hepta Slab", serif;
   padding: 20px 10px;
-  font-size: 24px;
-  font-family: monospace;
+  font-size: 22px;
   transition: all 0.4s ease;
 }
+.nav-link:nth-of-type(1) {
+  border-right: 1px solid black;
+}
 .nav-link:hover {
-  color: rgb(120, 120, 120);
+  color: #d41623;
   text-decoration: underline;
 }
 .Logo {
@@ -201,13 +217,12 @@ nav {
   align-items: center;
   flex-direction: row;
   transition: all 0.3s ease;
-  background-color: #4285f4;
+  background-color: #d41623;
   border-radius: 30px;
   padding: 10px;
   cursor: pointer;
 }
 .search-button:hover {
-  background-color: #4285f4;
   color: white;
   width: 5em;
 }
@@ -326,7 +341,7 @@ nav {
   margin: 0px 20px 20px 20px;
   border-radius: 6px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 20px;
+  padding: 10px 0px;
 }
 
 .game-image {
@@ -335,21 +350,39 @@ nav {
   align-self: center;
 }
 .game-title {
-  color: black;
-  font-size: 24px;
-  height: 2em;
+  color: white;
+  background-color: #d41623;
+  padding: 10px;
+  font-family: "Roboto Mono", monospace;
+  width: calc(100% - 20px);
+  text-align: center;
+  font-size: 19px;
+  height: 2.5em;
 }
 .game-info-cont {
+  background-color: #d41623;
+  color: white;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 800;
+  font-size: 19px;
   display: flex;
+  padding: 10px 0px;
   width: 100%;
+  height: 2em;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
 }
 .game-price {
-  padding: 5px 100px;
+  background-color: #d41623;
+  color: white;
+  font-weight: 800;
+  font-family: "Roboto Mono", monospace;
+  padding: 5px 0px;
+  text-align: center;
+  width: 100%;
+  font-size: 22px;
   align-self: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .filter-column {
   position: sticky;
@@ -373,9 +406,11 @@ nav {
 }
 .filter-category {
   color: rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  font-family: "Raleway", sans-serif;
 }
 .filter-arrow {
-  width: 0.8em;
+  width: 1.5em;
   opacity: 0.4;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -401,7 +436,7 @@ nav {
 }
 .clear-button {
   outline: none;
-  border: 3px solid #4285f4;
+  border: 3px solid #d41623;
   border-radius: 40px;
   padding: 10px;
   align-self: center;
@@ -418,7 +453,8 @@ nav {
   transition: all 0.4s ease;
 }
 .clear-button:hover {
-  background-color: #4285f4;
+  background-color: #d41623;
+  border: 0px;
   color: white;
 }
 .popUp {
@@ -435,51 +471,72 @@ nav {
   z-index: 3;
 }
 .content {
-  position: absolute;
-  left: calc(30% - 60px);
-  top: 3em;
+  position: fixed;
+  left: 30%;
+  top: 1em;
   display: flex;
-  padding: 30px 60px;
+  padding: 30px 0px;
   z-index: 5;
   border-radius: 6px;
   justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   width: 40%;
-  height: 100vh;
+  height: 90vh;
   background-color: #fff;
 }
 .popup-title {
-  color: black;
-  font-family: monospace, sans-serif;
-  font-size: 34px;
+  color: rgb(245, 245, 245);
+  width: 100%;
+  height: 2em;
+  text-align: center;
+  margin: 10px 0px 0px 0px;
+  background-color: #d41623;
+  padding: 10px 0px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 30px;
 }
 .popup-image {
   width: 19em;
 }
 .popup-description {
   font-family: "Open-sans", sans-serif;
-  width: 100%;
-  font-weight: 400;
-  font-size: 18px;
-  text-align: center;
+  width: calc(100% - 40px);
+  height: 14.5em;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  color: white;
+  background-color: #d41623;
+  font-weight: 600;
+  font-size: 16.5px;
+}
+.display-block {
+  display: block;
+}
+.display-none {
+  display: none;
 }
 .popup-info-cont {
   display: flex;
-  width: 100%;
+  width: calc(100% - 20px);
   padding: 10px;
-  border: 2px solid black;
-  border-radius: 10px;
+  background-color: #d41623;
+  color: white;
+  font-weight: 700;
+  font-family: "Roboto Mono", monospace;
+  font-size: 18px;
   flex-direction: row;
   justify-content: space-between;
 }
 .close-popup {
   z-index: 4;
-  /* visibility: hidden; */
-  position: absolute;
+  position: fixed;
   right: 1em;
   top: 1em;
   width: 1.5em;
+  padding: 5px;
+  background-color: #fff;
+  border-radius: 50%;
 }
 .page-navigation {
   display: flex;

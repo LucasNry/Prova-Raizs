@@ -20,7 +20,6 @@ export default class Quarta extends Component {
       .get()
       .then(query => {
         query.forEach(game => {
-          console.log(game.data());
           gamesData.push({
             key: Math.min(Math.random * 999999),
             image: game.data().url,
@@ -41,7 +40,7 @@ export default class Quarta extends Component {
   render() {
     return (
       <div className="quarta">
-        <h1 className="quarta-title">Jogos recem chegados</h1>
+        <h1 className="quarta-title">Jogos Populares</h1>
         <div className="quarta-text">{gameDisplays}</div>
       </div>
     );

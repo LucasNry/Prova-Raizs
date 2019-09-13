@@ -6,20 +6,6 @@ import ps4 from "./Images/ps4.png";
 import nSwitch from "./Images/nSwitch.png";
 
 export default class Destaque extends React.Component {
-  componentDidMount() {
-    //TODO: Only uncomment this if the pop-up is working, cause then this will be as well
-    // this.refs.platforms.addEventListener("click", () => {
-    //   if (window.location.href[20] == "0") {
-    //     localStorage.setItem(
-    //       "searchParam",
-    //       "Nintendo " + this.refs.platforms.childNodes[1].innerHTML
-    //     );
-    //     localStorage.setItem("searchType", "filter");
-    //     window.location.href += "catalogo";
-    //   }
-    // });
-  }
-
   render() {
     return (
       <div className="main">
