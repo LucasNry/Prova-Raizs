@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import GenreContainer from "../../Components/GenreContainer";
 import "../../styles.css";
 import xone from "./Images/xone.png";
 import ps4 from "./Images/ps4.png";
 import nSwitch from "./Images/nSwitch.png";
 
-export default class Destaque extends React.Component {
+export default class Destaque extends Component {
   render() {
     return (
       <div className="main">
